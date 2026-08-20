@@ -1,25 +1,77 @@
 from .cliente import Cliente
-from .producto import Producto
+from .item_proforma import ItemProforma
+from .producto_digital import ProductoDigital
+from .producto_fisico import ProductoFisico
+from .proforma import Proforma
 
 
 def main() -> None:
-    producto = Producto(
-        "Laptop",
-        850.00,
-        2
-    )
-
     cliente = Cliente(
         "Sergio",
         "sergio@email.com",
         "Guayaquil"
     )
 
-    print(f"Stock inicial: {producto.stock}")
+    laptop = ProductoFisico(
+        "Laptop",
+        850.00,
+        2,
+        2.1,
+        "Bodega A"
+    )
 
-    cliente.comprar(producto)
+    curso = ProductoDigital(
+        "Curso Python",
+        120.00,
+        100,
+        1500.0,
+        "https://ejemplo.com/curso"
+    )
 
-    print(f"Stock final: {producto.stock}")
+    item_laptop = ItemProforma(
+        laptop,
+        1
+    )
+
+    item_curso = ItemProforma(
+        curso,
+        2
+    )
+
+    proforma = Proforma(cliente)
+
+    proforma.agregar_item(item_laptop)
+    proforma.agregar_item(item_curso)
+
+    print("Producto fisico:", laptop.nombre)
+    print("Peso:", laptop.peso, "kg")
+    print("Ubicacion:", laptop.ubicacion_almacen)
+
+    print()
+
+    print("Producto digital:", curso.nombre)
+    print("Tamano:", curso.tamano_mb, "MB")
+    print("URL:", curso.url_descarga)
+
+    print()
+
+    print(
+        "Subtotal Laptop: $",
+        item_laptop.calcular_subtotal(),
+        sep=""
+    )
+
+    print(
+        "Subtotal Curso: $",
+        item_curso.calcular_subtotal(),
+        sep=""
+    )
+
+    print(
+        "Total Proforma: $",
+        proforma.calcular_total(),
+        sep=""
+    )
 
 
 if __name__ == "__main__":
