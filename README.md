@@ -88,3 +88,60 @@ Producto
    +-- ProductoFisico
    |
    +-- ProductoDigital
+
+```
+
+## Diagramas UML
+
+### Semana 1
+
+![UML Semana 1](docs/uml/producto_cliente.png)
+
+### Semana 2
+
+![UML Semana 2](docs/uml/uml_semana2_herencia_composicion.drawio.png)
+
+## Ejemplo de ejecución
+
+```text
+Producto fisico: Laptop
+Peso: 2.1 kg
+Ubicacion: Bodega A
+
+Producto digital: Curso Python
+Tamano: 1500.0 MB
+URL: https://ejemplo.com/curso
+
+Subtotal Laptop: $850.0
+Subtotal Curso: $240.0
+Total Proforma: $1090.0
+```
+
+## Ejecución
+
+En Windows:
+
+```bash
+python -m src.main
+```
+
+En Linux:
+
+```bash
+python3 -m src.main
+```
+
+## Tecnologías utilizadas
+
+- Python
+- Programación Orientada a Objetos
+- UML
+- Git
+- GitHub
+- Windows
+- Fedora Linux
+- diagrams.net
+
+## Autor
+
+Sergio Méndez
