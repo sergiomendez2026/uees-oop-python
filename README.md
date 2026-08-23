@@ -1,49 +1,90 @@
 # UEES - Programación Orientada a Objetos - Python
 
-Proyecto académico desarrollado en Python para aplicar los conceptos fundamentales de programación orientada a objetos.
+Proyecto desarrollado como parte de la asignatura de Programación Orientada a Objetos.
 
-## Contenido
+El sistema modela una empresa proveedora de tecnología y capacitación que puede atender tanto a personas naturales bajo un modelo B2C como a empresas bajo un modelo B2B.
+
+## Objetivo
+
+Aplicar los fundamentos de Programación Orientada a Objetos mediante el modelado de clientes, productos y proformas utilizando encapsulación, herencia, asociación y composición.
+
+## Semana 1
+
+Durante la Semana 1 se implementaron las clases:
+
+- `Producto`
+- `Cliente`
+
+### Conceptos aplicados
 
 - Clases y objetos
 - Encapsulación
-- Properties y setters
+- Atributos privados
+- Getters y setters
+- Propiedades
 - Asociación entre objetos
-- Validación de atributos
-- Diagrama UML
 
-## Clases
+La clase `Producto` representa los artículos o servicios comercializados por la empresa.
 
-### Producto
+La clase `Cliente` representa al comprador, que puede ser una persona natural o una empresa.
 
-Atributos:
+## Semana 2
 
-- nombre
-- precio
-- stock
+Durante la Semana 2 se amplió el modelo incorporando herencia y composición.
 
-Comportamiento:
+### Herencia
 
-- validación de nombre
-- validación de precio
-- validación de stock
-- verificación de disponibilidad mediante `hay_stock()`
+La clase `Producto` funciona como clase base para:
 
-### Cliente
+- `ProductoFisico`
+- `ProductoDigital`
 
-Atributos:
+`ProductoFisico` incorpora atributos específicos como:
 
-- nombre
-- email
-- ciudad
+- peso
+- ubicación de almacenamiento
 
-Comportamiento:
+`ProductoDigital` incorpora atributos como:
 
-- validación de atributos
-- compra de productos mediante `comprar()`
+- tamaño en MB
+- URL de descarga
 
-## Asociación
+### Composición
 
-La clase `Cliente` utiliza objetos de la clase `Producto` mediante el método:
+La clase `Proforma` contiene una colección de objetos `ItemProforma`.
 
-```python
-cliente.comprar(producto)
+Cada `ItemProforma` relaciona:
+
+- un producto
+- una cantidad
+- el cálculo del subtotal
+
+La clase `Proforma` permite agregar diferentes ítems y calcular el total de la operación comercial.
+
+## Clases principales
+
+- `Cliente`
+- `Producto`
+- `ProductoFisico`
+- `ProductoDigital`
+- `ItemProforma`
+- `Proforma`
+
+## Modelo general
+
+```text
+Cliente
+   |
+   v
+Proforma
+   |
+   v
+ItemProforma
+   |
+   v
+Producto
+   ^
+   |
+   +-- ProductoFisico
+   |
+   +-- ProductoDigital
