@@ -30,9 +30,11 @@ class Proforma:
         self._items.append(item)
 
     def calcular_total(self) -> float:
-        total = 0.0
+        subtotal = 0.0
 
         for item in self._items:
-            total += item.calcular_subtotal()
+            subtotal += item.calcular_subtotal()
 
-        return total
+        descuento = self._cliente.calcular_descuento()
+
+        return subtotal * (1 - descuento)
