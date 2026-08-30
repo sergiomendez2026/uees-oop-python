@@ -4,83 +4,155 @@ Proyecto desarrollado como parte de la asignatura de Programación Orientada a O
 
 El sistema modela una empresa proveedora de tecnología y capacitación que puede atender tanto a personas naturales bajo un modelo B2C como a empresas bajo un modelo B2B.
 
-## Objetivo
-
-Aplicar los fundamentos de Programación Orientada a Objetos mediante el modelado de clientes, productos y proformas utilizando encapsulación, asociación, herencia, composición, abstracción y polimorfismo.
+El proyecto se desarrolla incrementalmente por semanas y permite aplicar conceptos fundamentales de Programación Orientada a Objetos utilizando Python.
 
 ---
 
-## Semana 1 - Encapsulación y asociación
+## Objetivo
 
-Durante la Semana 1 se implementaron las clases:
+Aplicar los fundamentos de Programación Orientada a Objetos mediante el modelado de clientes, productos y proformas utilizando:
+
+- clases y objetos
+- encapsulación
+- propiedades
+- asociación
+- herencia
+- composición
+- abstracción
+- métodos abstractos
+- sobrescritura
+- polimorfismo
+
+---
+
+# Semana 1 - Encapsulación y asociación
+
+Durante la Semana 1 se implementaron las clases principales:
 
 - `Producto`
 - `Cliente`
 
-### Conceptos aplicados
+## Conceptos aplicados
 
 - Clases y objetos
 - Encapsulación
-- Propiedades
-- Getters y setters mediante `@property`
+- Atributos protegidos mediante propiedades
+- Getters y setters con `@property`
+- Validación de datos
 - Asociación entre objetos
 
-La clase `Producto` representa los artículos o servicios comercializados por la empresa.
+La clase `Producto` representa los productos o servicios comercializados por la empresa.
 
-La clase `Cliente` representa al comprador del sistema.
+La clase `Cliente` representa al comprador y contiene información como:
+
+- nombre
+- correo electrónico
+- ciudad
+
+Además, el cliente puede interactuar con objetos de tipo `Producto`.
+
+## UML Semana 1
+
+![UML Semana 1](docs/uml/producto_cliente.png)
 
 ---
 
-## Semana 2 - Herencia y composición
+# Semana 2 - Herencia y composición
 
-Durante la Semana 2 se amplió el modelo incorporando herencia y composición.
+Durante la Semana 2 se amplió el modelo incorporando especialización de productos y composición mediante proformas.
 
-### Herencia
+## Herencia
 
 La clase `Producto` funciona como clase base para:
 
 - `ProductoFisico`
 - `ProductoDigital`
 
-`ProductoFisico` incorpora:
+### ProductoFisico
+
+Agrega características específicas como:
 
 - peso
 - ubicación de almacenamiento
 
-`ProductoDigital` incorpora:
+### ProductoDigital
+
+Agrega características específicas como:
 
 - tamaño en MB
 - URL de descarga
 
-### Composición
+La jerarquía es:
+
+```text
+Producto
+   |
+   +-- ProductoFisico
+   |
+   +-- ProductoDigital
+```
+
+## Composición
 
 La clase `Proforma` contiene una colección de objetos `ItemProforma`.
 
 Cada `ItemProforma` relaciona:
 
-- un producto
+- un `Producto`
 - una cantidad
 - el cálculo del subtotal
 
+La estructura conceptual es:
+
+```text
+Cliente
+   |
+   v
+Proforma
+   |
+   v
+ItemProforma
+   |
+   v
+Producto
+```
+
+La clase `Proforma` permite agregar diferentes productos y calcular el valor total de una operación comercial.
+
+## UML Semana 2
+
+![UML Semana 2](docs/uml/uml_semana2_herencia_composicion.drawio.png)
+
 ---
 
-## Semana 3 - Polimorfismo, interfaces y clases abstractas
+# Semana 3 - Abstracción y polimorfismo
 
-Durante la Semana 3 se incorporaron abstracción, métodos abstractos, especialización de clientes y polimorfismo.
+Durante la Semana 3 se incorporaron abstracción y polimorfismo al modelo de clientes.
 
-### Clase abstracta Cliente
+La clase `Cliente` se convirtió en una clase abstracta utilizando el módulo `abc` de Python.
 
-Python utiliza el módulo estándar `abc`.
+Se agregaron dos especializaciones:
 
-La clase `Cliente` hereda de `ABC`:
+- `ClienteMayorista`
+- `ClienteMinorista`
+
+## Clase abstracta Cliente
+
+La declaración utiliza:
 
 ```python
 from abc import ABC, abstractmethod
 
+
 class Cliente(ABC):
+    ...
 ```
 
-y define el método:
+Esto impide que `Cliente` sea utilizado como una implementación concreta cuando todavía existen comportamientos que deben ser definidos por sus subclases.
+
+## Método abstracto
+
+La clase `Cliente` define:
 
 ```python
 @abstractmethod
@@ -88,69 +160,92 @@ def calcular_descuento(self) -> float:
     pass
 ```
 
-Esto impide crear directamente objetos de tipo `Cliente` y obliga a las subclases concretas a proporcionar una implementación de `calcular_descuento()`.
+Cada subclase debe proporcionar su propia implementación.
 
-### ClienteMayorista
+## ClienteMayorista
 
-```python
-class ClienteMayorista(Cliente):
-    def calcular_descuento(self) -> float:
-        return 0.20
-```
-
-El descuento aplicado es del **20 %**.
-
-### ClienteMinorista
+`ClienteMayorista` sobrescribe el método:
 
 ```python
-class ClienteMinorista(Cliente):
-    def calcular_descuento(self) -> float:
-        return 0.05
+def calcular_descuento(self) -> float:
+    return 0.20
 ```
 
-El descuento aplicado es del **5 %**.
+Por lo tanto, un cliente mayorista obtiene un descuento del:
 
-### Polimorfismo
+```text
+20 %
+```
 
-La clase `Proforma` mantiene una referencia de tipo:
+## ClienteMinorista
+
+`ClienteMinorista` implementa:
 
 ```python
-Cliente
+def calcular_descuento(self) -> float:
+    return 0.05
 ```
 
-y obtiene el descuento mediante:
+Por lo tanto, un cliente minorista obtiene un descuento del:
+
+```text
+5 %
+```
+
+## Polimorfismo
+
+La clase `Proforma` trabaja con la abstracción `Cliente`:
+
+```python
+def __init__(self, cliente: Cliente) -> None:
+    self._cliente = cliente
+```
+
+Cuando calcula el total ejecuta:
 
 ```python
 descuento = self._cliente.calcular_descuento()
-```
-
-Posteriormente calcula:
-
-```python
 return subtotal * (1 - descuento)
 ```
 
-La misma operación produce distintos resultados dependiendo de si el objeto real es:
+`Proforma` no necesita conocer si el objeto recibido es un `ClienteMayorista` o un `ClienteMinorista`.
 
-- `ClienteMayorista`
-- `ClienteMinorista`
+El comportamiento correcto se determina dinámicamente según el objeto utilizado en tiempo de ejecución.
 
-No es necesario utilizar estructuras `if/elif` para identificar el tipo de cliente.
+Conceptualmente:
 
-El comportamiento se selecciona dinámicamente mediante polimorfismo.
+```text
+                 Cliente
+               <<abstract>>
+                    |
+          +---------+---------+
+          |                   |
+          v                   v
+ClienteMayorista       ClienteMinorista
+      |                       |
+      v                       v
+     20 %                    5 %
+```
 
-### Resultados
+Esto constituye una aplicación directa de polimorfismo.
 
-| Tipo de cliente | Descuento | Total |
-|---|---:|---:|
-| ClienteMayorista | 20 % | $872.00 |
-| ClienteMinorista | 5 % | $1035.50 |
+## UML Semana 3
+
+![UML Semana 3 - Abstracción y Polimorfismo](docs/uml/uml_semana3_polimorfismo.png)
+
+El archivo fuente del diagrama PlantUML se encuentra en:
+
+```text
+docs/uml/uml_semana3_polimorfismo.puml
+```
 
 ---
 
-## Clases principales
+# Clases principales
 
-- `Cliente` — clase abstracta
+Actualmente el proyecto contiene las siguientes clases:
+
+- `Cliente`
 - `ClienteMayorista`
 - `ClienteMinorista`
 - `Producto`
@@ -161,19 +256,19 @@ El comportamiento se selecciona dinámicamente mediante polimorfismo.
 
 ---
 
-## Modelo general
+# Modelo general
 
 ```text
                     Cliente
-                     <<ABC>>
-                  /           \
-                 /             \
-                v               v
-      ClienteMayorista    ClienteMinorista
-              |                  |
-              +--------+---------+
+                  <<abstract>>
                        |
-                       v
+              +--------+--------+
+              |                 |
+              v                 v
+     ClienteMayorista     ClienteMinorista
+              \                 /
+               \               /
+                v             v
                     Proforma
                        |
                        v
@@ -181,76 +276,45 @@ El comportamiento se selecciona dinámicamente mediante polimorfismo.
                        |
                        v
                     Producto
-                   /        \
-                  /          \
-                 v            v
+                       |
+               +-------+-------+
+               |               |
+               v               v
         ProductoFisico   ProductoDigital
 ```
 
 ---
 
-# Diagramas UML
+# Ejemplo de ejecución
 
-## Semana 1
+El programa crea dos clientes con comportamientos distintos.
 
-![UML Semana 1](docs/uml/producto_cliente.png)
-
-## Semana 2
-
-![UML Semana 2](docs/uml/uml_semana2_herencia_composicion.drawio.png)
-
-## Semana 3
-
-El modelo actualizado incorpora:
-
-- `Cliente` como clase abstracta
-- `ClienteMayorista`
-- `ClienteMinorista`
-- `calcular_descuento()`
-- herencia
-- composición
-- polimorfismo
-
-El diagrama UML correspondiente a Semana 3 será incorporado junto con las evidencias finales.
-
----
-
-# Ejecución
-
-## Windows
-
-Desde la raíz del repositorio:
-
-```powershell
-python -m src.main
-```
-
-## Fedora Linux
-
-```bash
-python3 -m src.main
-```
-
----
-
-## Ejemplo de ejecución Semana 3
+## Cliente mayorista
 
 ```text
-Producto fisico: Laptop
-Peso: 2.1 kg
-Ubicacion: Bodega A
-
-Producto digital: Curso Python
-Tamano: 1500.0 MB
-URL: https://ejemplo.com/curso
-
 === PROFORMA CLIENTE MAYORISTA ===
 Cliente: Sergio
 Descuento: 20.0 %
 Subtotal Laptop: $850.0
 Subtotal Curso: $240.0
 Total Proforma: $872.0
+```
 
+Cálculo:
+
+```text
+Subtotal = 850 + 240
+Subtotal = 1090
+
+Descuento = 20 %
+
+Total = 1090 × (1 - 0.20)
+Total = 872
+```
+
+## Cliente minorista
+
+```text
 === PROFORMA CLIENTE MINORISTA ===
 Cliente: Ana
 Descuento: 5.0 %
@@ -259,43 +323,239 @@ Subtotal Curso: $240.0
 Total Proforma: $1035.5
 ```
 
-La ejecución fue comprobada tanto en Windows como en Fedora Linux.
+Cálculo:
+
+```text
+Subtotal = 850 + 240
+Subtotal = 1090
+
+Descuento = 5 %
+
+Total = 1090 × (1 - 0.05)
+Total = 1035.5
+```
+
+Los diferentes resultados se obtienen mediante polimorfismo sin modificar la lógica interna de `Proforma`.
 
 ---
 
-## Tecnologías utilizadas
+# Ejecución del proyecto
+
+El proyecto ha sido probado tanto en Windows como en Fedora Linux.
+
+## Windows
+
+Desde la raíz del repositorio:
+
+```bash
+python -m src.main
+```
+
+## Fedora Linux
+
+Desde la raíz del repositorio:
+
+```bash
+python3 -m src.main
+```
+
+---
+
+# Evidencias - Semana 3
+
+Las siguientes evidencias documentan la implementación y ejecución de abstracción y polimorfismo en Python.
+
+## Windows - Antigravity IDE
+
+El desarrollo en Windows se realizó utilizando Antigravity IDE.
+
+### 01 - Cliente como clase abstracta
+
+Se evidencia que `Cliente` hereda de `ABC`.
+
+![Cliente como clase abstracta](docs/evidencias/semana3/python/windows/01a_cliente_clase_abstracta_antigravity.png)
+
+### 02 - Método abstracto
+
+Se evidencia el uso del decorador `@abstractmethod` y la definición de `calcular_descuento()`.
+
+![Método abstracto](docs/evidencias/semana3/python/windows/01b_cliente_metodo_abstracto_antigravity.png)
+
+### 03 - ClienteMayorista
+
+Implementación de `ClienteMayorista` con descuento del 20 %.
+
+![Cliente Mayorista](docs/evidencias/semana3/python/windows/02_cliente_mayorista_antigravity.png)
+
+### 04 - ClienteMinorista
+
+Implementación de `ClienteMinorista` con descuento del 5 %.
+
+![Cliente Minorista](docs/evidencias/semana3/python/windows/03_cliente_minorista_antigravity.png)
+
+### 05 - Polimorfismo en Proforma
+
+La clase `Proforma` invoca `calcular_descuento()` utilizando una referencia de tipo `Cliente`.
+
+![Polimorfismo](docs/evidencias/semana3/python/windows/04_polimorfismo_antigravity.png)
+
+### 06 - Ejecución en PowerShell
+
+La ejecución demuestra que el mismo proceso de cálculo genera resultados diferentes según el tipo concreto de cliente.
+
+![Prueba PowerShell Windows](docs/evidencias/semana3/python/windows/05_prueba_powershell_windows.png)
+
+---
+
+## Fedora Linux
+
+También se verificó la portabilidad del proyecto ejecutándolo en Fedora Linux.
+
+### 07 - Entorno Python y rama Git
+
+Se verificó:
+
+- repositorio correcto
+- rama `fase-03-abstraccion`
+- sincronización con GitHub
+- entorno Python
+- historial Git
+
+![Fedora entorno y rama](docs/evidencias/semana3/python/fedora/06_fedora_entorno_y_branch_python.png)
+
+### 08 - Ejecución en Fedora
+
+La misma implementación fue ejecutada correctamente en Fedora Linux.
+
+![Prueba Python Fedora](docs/evidencias/semana3/python/fedora/07_prueba_python_fedora.png)
+
+Esto permite comprobar que el proyecto no depende exclusivamente del entorno Windows.
+
+---
+
+# Estructura del proyecto
+
+```text
+uees-oop-python/
+|
+├── src/
+│   ├── __init__.py
+│   ├── cliente.py
+│   ├── cliente_mayorista.py
+│   ├── cliente_minorista.py
+│   ├── producto.py
+│   ├── producto_fisico.py
+│   ├── producto_digital.py
+│   ├── item_proforma.py
+│   ├── proforma.py
+│   └── main.py
+│
+├── docs/
+│   ├── uml/
+│   │   ├── producto_cliente.png
+│   │   ├── uml_producto_cliente.drawio
+│   │   ├── uml_semana2_herencia_composicion.drawio
+│   │   ├── uml_semana2_herencia_composicion.drawio.png
+│   │   ├── uml_semana3_polimorfismo.puml
+│   │   └── uml_semana3_polimorfismo.png
+│   │
+│   └── evidencias/
+│       └── semana3/
+│           └── python/
+│               ├── windows/
+│               │   ├── 01a_cliente_clase_abstracta_antigravity.png
+│               │   ├── 01b_cliente_metodo_abstracto_antigravity.png
+│               │   ├── 02_cliente_mayorista_antigravity.png
+│               │   ├── 03_cliente_minorista_antigravity.png
+│               │   ├── 04_polimorfismo_antigravity.png
+│               │   └── 05_prueba_powershell_windows.png
+│               │
+│               └── fedora/
+│                   ├── 06_fedora_entorno_y_branch_python.png
+│                   └── 07_prueba_python_fedora.png
+│
+├── tests/
+├── .gitignore
+└── README.md
+```
+
+---
+
+# Conceptos de POO demostrados
+
+| Concepto | Implementación |
+|---|---|
+| Clases y objetos | Todas las entidades del dominio |
+| Encapsulación | Atributos y propiedades |
+| Asociación | `Cliente` y `Producto` |
+| Herencia | Productos y tipos de clientes |
+| Composición | `Proforma` contiene `ItemProforma` |
+| Abstracción | `Cliente(ABC)` |
+| Método abstracto | `calcular_descuento()` |
+| Sobrescritura | Implementación del descuento por subclase |
+| Polimorfismo | `Proforma` utiliza distintos tipos de `Cliente` |
+| Validación | Setters y constructores |
+| Type hints | Tipado de parámetros y retornos |
+
+---
+
+# Tecnologías utilizadas
 
 - Python
 - Programación Orientada a Objetos
-- Python `abc`
 - Antigravity IDE
-- Windows PowerShell
-- Fedora Linux
-- UML
 - PlantUML
 - diagrams.net
 - Git
 - GitHub
+- Windows
+- PowerShell
+- Fedora Linux
 
 ---
 
-## Conceptos de Programación Orientada a Objetos aplicados
+# Control de versiones
 
-- Clases y objetos
-- Encapsulación
-- Propiedades
-- Asociación
-- Herencia
-- Composición
-- Abstracción
-- Clases abstractas
-- Métodos abstractos
-- Sobrescritura
-- Polimorfismo
-- Enlace dinámico
+El proyecto utiliza Git para mantener un historial incremental de cambios.
+
+Durante la Semana 3 se utilizó la rama:
+
+```text
+fase-03-abstraccion
+```
+
+La implementación fue posteriormente integrada a:
+
+```text
+main
+```
+
+mediante Pull Request en GitHub.
 
 ---
 
-## Autor
+# Estado actual
 
-Sergio Méndez
+Semana 1:
+
+```text
+Encapsulación y asociación          COMPLETADO
+```
+
+Semana 2:
+
+```text
+Herencia y composición              COMPLETADO
+```
+
+Semana 3:
+
+```text
+Abstracción y polimorfismo          COMPLETADO
+```
+
+---
+
+# Autor
+
+**Sergio Méndez**
