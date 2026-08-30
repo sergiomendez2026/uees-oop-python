@@ -1,7 +1,9 @@
+from abc import ABC, abstractmethod
+
 from .producto import Producto
 
 
-class Cliente:
+class Cliente(ABC):
     def __init__(self, nombre: str, email: str, ciudad: str):
         self.nombre = nombre
         self.email = email
@@ -49,3 +51,7 @@ class Cliente:
             print(f"{self.nombre} compró {producto.nombre}")
         else:
             print(f"No hay stock disponible de {producto.nombre}")
+
+    @abstractmethod
+    def calcular_descuento(self) -> float:
+        pass
