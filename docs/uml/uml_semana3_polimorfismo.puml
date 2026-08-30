@@ -1,0 +1,102 @@
+@startuml
+
+title Sistema de Gestión de Proformas - Semana 3
+skinparam classAttributeIconSize 0
+
+abstract class Cliente {
+    - nombre: String
+    - email: String
+    - ciudad: String
+
+    + getNombre(): String
+    + setNombre(nombre: String): void
+    + getEmail(): String
+    + setEmail(email: String): void
+    + getCiudad(): String
+    + setCiudad(ciudad: String): void
+    + comprar(producto: Producto): void
+    {abstract} + calcularDescuento(): double
+}
+
+class ClienteMayorista {
+    - descuento: double
+
+    + calcularDescuento(): double
+}
+
+class ClienteMinorista {
+    - descuento: double
+
+    + calcularDescuento(): double
+}
+
+class Proforma {
+    - cliente: Cliente
+    - items: List<ItemProforma>
+
+    + agregarItem(item: ItemProforma): void
+    + calcularTotal(): double
+}
+
+class ItemProforma {
+    - producto: Producto
+    - cantidad: int
+
+    + getProducto(): Producto
+    + getCantidad(): int
+    + calcularSubtotal(): double
+}
+
+class Producto {
+    - nombre: String
+    - precio: double
+    - stock: int
+
+    + getNombre(): String
+    + setNombre(nombre: String): void
+    + getPrecio(): double
+    + setPrecio(precio: double): void
+    + getStock(): int
+    + setStock(stock: int): void
+    + hayStock(): boolean
+}
+
+class ProductoFisico {
+    - peso: double
+    - ubicacionAlmacen: String
+
+    + getPeso(): double
+    + setPeso(peso: double): void
+    + getUbicacionAlmacen(): String
+    + setUbicacionAlmacen(ubicacion: String): void
+}
+
+class ProductoDigital {
+    - tamanoMB: double
+    - urlDescarga: String
+
+    + getTamanoMB(): double
+    + setTamanoMB(tamanoMB: double): void
+    + getUrlDescarga(): String
+    + setUrlDescarga(url: String): void
+}
+
+Cliente <|-- ClienteMayorista
+Cliente <|-- ClienteMinorista
+
+Producto <|-- ProductoFisico
+Producto <|-- ProductoDigital
+
+Cliente "1" -- "0..*" Proforma : cliente
+Proforma "1" *-- "0..*" ItemProforma : contiene
+ItemProforma "0..*" --> "1" Producto : producto
+
+note right of ClienteMayorista
+  Descuento: 20%
+end note
+
+note right of ClienteMinorista
+  Descuento: 5%
+end note
+
+@enduml
