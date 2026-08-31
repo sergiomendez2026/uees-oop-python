@@ -55,12 +55,13 @@ Desde la raíz del repositorio:
 ```bash
 python -m src.main
 
-### Fedora Linux
+Fedora Linux
 
-```bash
 python3 -m src.main
 
-# Semana 1 - Encapsulación y asociación
+---
+
+## Semana 1 - Encapsulación y asociación
 
 Durante la Semana 1 se implementaron las clases principales:
 
