@@ -1,10 +1,12 @@
 # UEES - Programación Orientada a Objetos - Python
 
+## Descripción breve
+
 Proyecto desarrollado como parte de la asignatura de Programación Orientada a Objetos.
 
 El sistema modela una empresa proveedora de tecnología y capacitación que puede atender tanto a personas naturales bajo un modelo B2C como a empresas bajo un modelo B2B.
 
-El proyecto se desarrolla incrementalmente por semanas y permite aplicar conceptos fundamentales de Programación Orientada a Objetos utilizando Python.
+El proyecto se desarrolló incrementalmente hasta la Semana 3 y aplica conceptos fundamentales de Programación Orientada a Objetos utilizando Python.
 
 ---
 
@@ -24,6 +26,39 @@ Aplicar los fundamentos de Programación Orientada a Objetos mediante el modelad
 - polimorfismo
 
 ---
+
+## Principales funcionalidades
+
+- Gestión de clientes y productos mediante clases.
+- Encapsulación y validación de atributos.
+- Especialización de productos mediante herencia.
+- Generación de proformas mediante composición.
+- Cálculo de subtotales por producto y cantidad.
+- Gestión de clientes mayoristas y minoristas.
+- Aplicación de descuentos mediante abstracción y polimorfismo.
+- Ejecución comprobada en Windows y Fedora Linux.
+
+---
+
+## Lenguaje utilizado
+
+**Python 3**
+
+---
+
+## Ejecución rápida
+
+Desde la raíz del repositorio:
+
+### Windows
+
+```bash
+python -m src.main
+
+### Fedora Linux
+
+```bash
+python3 -m src.main
 
 # Semana 1 - Encapsulación y asociación
 
