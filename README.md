@@ -51,11 +51,9 @@ Aplicar los fundamentos de Programación Orientada a Objetos mediante el modelad
 Desde la raíz del repositorio:
 
 ### Windows
-
-```bash
 python -m src.main
 
-Fedora Linux
+### Fedora Linux
 
 python3 -m src.main
 
